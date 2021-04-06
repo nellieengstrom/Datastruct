@@ -73,6 +73,7 @@ int main() {
         std::cout << "Sequence: ";
         std::copy(std::begin(seq), std::end(seq), std::ostream_iterator<int>{std::cout, " "});
 
+
         execute(seq, std::vector<int>{2, 1});
 		
 		std::cout << "\nEmpty sequence: ";
@@ -81,9 +82,9 @@ int main() {
         execute(empty, std::vector<int>{});
     }
 
-    /*****************************************************
-     * TEST PHASE 2                                       *
-     ******************************************************/
+    ///*****************************************************
+    // * TEST PHASE 2                                       *
+    // ******************************************************/
     {
         std::cout << "\n\nTEST PHASE 2\n\n";
 
@@ -95,9 +96,9 @@ int main() {
         execute(seq, std::vector<int>{2});
     }
 
-    /*****************************************************
-     * TEST PHASE 3                                       *
-     ******************************************************/
+    /////*****************************************************
+    //// * TEST PHASE 3                                       *
+    //// ******************************************************/
     {
         std::cout << "\n\nTEST PHASE 3\n\n";
 
@@ -109,9 +110,9 @@ int main() {
         execute(seq, std::vector<int>{3});
     }
 
-    /*****************************************************
-     * TEST PHASE 4                                       *
-     ******************************************************/
+    /////*****************************************************
+    //// * TEST PHASE 4                                       *
+    //// ******************************************************/
     {
         std::cout << "\n\nTEST PHASE 4\n\n";
 
@@ -123,9 +124,9 @@ int main() {
         execute(seq, std::vector<int>{3, 3});
     }
 
-    /*****************************************************
-     * TEST PHASE 5                                       *
-     ******************************************************/
+    ///*****************************************************
+    // * TEST PHASE 5                                       *
+    // ******************************************************/
     {
         std::cout << "\n\nTEST PHASE 5\n\n";
 
@@ -137,9 +138,9 @@ int main() {
         execute(seq, std::vector<int>{2, 4, 6, 8, 1, 3, 5, 7, 9});
     }
 
-    /*****************************************************
-     * TEST PHASE 6                                       *
-     ******************************************************/
+    ///*****************************************************
+    // * TEST PHASE 6                                       *
+    // ******************************************************/
     {
         std::cout << "\n\nTEST PHASE 6: test with long sequence loaded from a file\n\n";
 
@@ -194,16 +195,37 @@ void execute(std::vector<int>& V, const std::vector<int>& res) {
 
     std::cout << "\n\nIterative stable partition\n";
     TND004::stable_partition_iterative(V, even);
+    std::copy(std::begin(V), std::end(V), std::ostream_iterator<int>{std::cout, " "});
     assert(V == res);  // compare with the expected result
 
-    std::cout << "Divide-and-conquer stable partition\n";
-    TND004::stable_partition(_copy, even);
-    assert(_copy == res);  // compare with the expected result
+    //std::cout << "Divide-and-conquer stable partition\n";
+    //TND004::stable_partition(_copy, even);
+    //assert(_copy == res);  // compare with the expected result
 }
 
 // Iterative algorithm
 void TND004::stable_partition_iterative(std::vector<int>& V, std::function<bool(int)> p) {
     // IMPLEMENT before Lab1 HA
+    //empty vector, do nothing
+    if (size(V) == 0) {
+        return;
+    }
+   
+    int counter = 0;
+
+    for (int i = 0; i < size(V); i++) {
+        if (p(V[i])) {
+            if (i == 0) {
+                counter++;
+            }
+            else {
+                V.insert(V.begin() + counter, V[i]);
+                counter++;
+                V.erase(V.begin() + i + 1);
+            }
+        }
+    }
+
 }
 
 // Auxiliary function that performs the stable partition recursively
@@ -215,10 +237,9 @@ std::vector<int>::iterator TND004::stable_partition(std::vector<int>::iterator f
                                             std::vector<int>::iterator last,
                                             std::function<bool(int)> p) {
     // IMPLEMENT
+    //Find the middle
+
+    //Split to sub-problems (two or more smaller), exception base cases
 
     return first;  // delete this line
 }  // end of function
-
-
-
-
