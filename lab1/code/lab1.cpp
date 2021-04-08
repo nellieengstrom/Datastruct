@@ -38,21 +38,21 @@ private:
 /* *************************************** */
 
 namespace TND004 {
-// Iterative algorithm
-void stable_partition_iterative(std::vector<int>& V, std::function<bool(int)> p);
+    // Iterative algorithm
+    void stable_partition_iterative(std::vector<int>& V, std::function<bool(int)> p);
 
 
-// Auxiliary function that performs the stable partition recursively
-std::vector<int>::iterator stable_partition(std::vector<int>::iterator first,
-                                            std::vector<int>::iterator last,
-                                            std::function<bool(int)> p);
+    // Auxiliary function that performs the stable partition recursively
+    std::vector<int>::iterator stable_partition(std::vector<int>::iterator first,
+        std::vector<int>::iterator last,
+        std::function<bool(int)> p);
 
-// Divide-and-conquer algorithm
-void stable_partition(std::vector<int>& V, std::function<bool(int)> p) {
-    TND004::stable_partition(std::begin(V), std::end(V), p);  // call auxiliary function
+    // Divide-and-conquer algorithm
+    void stable_partition(std::vector<int>& V, std::function<bool(int)> p) {
+            TND004::stable_partition(std::begin(V), std::end(V), p);  // call auxiliary function
+
+    }  // namespace TND004
 }
-}  // namespace TND004
-
 void execute(std::vector<int>& V, const std::vector<int>& res);
 
 bool even(int i);
@@ -198,9 +198,11 @@ void execute(std::vector<int>& V, const std::vector<int>& res) {
     std::copy(std::begin(V), std::end(V), std::ostream_iterator<int>{std::cout, " "});
     assert(V == res);  // compare with the expected result
 
-    //std::cout << "Divide-and-conquer stable partition\n";
-    //TND004::stable_partition(_copy, even);
-    //assert(_copy == res);  // compare with the expected result
+    std::cout << std::endl;
+    std::cout <<  "Divide-and-conquer stable partition\n";
+    TND004::stable_partition(_copy, even);
+    std::copy(std::begin(_copy), std::end(_copy), std::ostream_iterator<int>{std::cout, " "});
+    assert(_copy == res);  // compare with the expected result
 }
 
 // Iterative algorithm
@@ -219,13 +221,13 @@ void TND004::stable_partition_iterative(std::vector<int>& V, std::function<bool(
                 counter++;
             }
             else {
+            //How much the memory execution time is needed, linear?
                 V.insert(V.begin() + counter, V[i]);
                 counter++;
                 V.erase(V.begin() + i + 1);
             }
         }
     }
-
 }
 
 // Auxiliary function that performs the stable partition recursively
@@ -236,10 +238,41 @@ void TND004::stable_partition_iterative(std::vector<int>& V, std::function<bool(
 std::vector<int>::iterator TND004::stable_partition(std::vector<int>::iterator first,
                                             std::vector<int>::iterator last,
                                             std::function<bool(int)> p) {
-    // IMPLEMENT
-    //Find the middle
+    // Base Case 0: The vector is empty
+    if (distance(first, last) == 0) {
+        std::cout << "Vector is empty" << std::endl;
+        return first;
+    }
 
-    //Split to sub-problems (two or more smaller), exception base cases
+    // Base Case 1: Both iterators are on the same element (one element)
+    // first points to the beginning of the element, last points to the end of the element = resulting in a distanse of 1
+    if (distance(first,last) == 1) {
+        //Checks if even --> return iterator pointing to the end of the block, including the element
+        if(p(*first)){
+            return last;
+        }
 
-    return first;  // delete this line
-}  // end of function
+        //Checks if odd --> return iterator pointing to the beginning of the block, not including the element
+        else {
+            return first;
+        }
+    }
+
+    // if we're not at the base case, meaning not empty and more than one element = then recursive
+    // split the elements into two parts until there are only one element left --> base case
+    else { 
+        //mid is the last element of the left half, and the first element of the right half
+        std::vector<int>::iterator mid = (first + (std::distance(first, last)) / 2);
+        std::vector<int>::iterator it1;
+        std::vector<int>::iterator it3;
+
+        //As long as there is more than one element, split into two parts
+        if (std::distance(first, last) > 1) {
+            //Recursive, calls itself for each split parts
+            it1 = stable_partition(first, mid, p);
+            it3 = stable_partition(mid, last, p);
+        }
+        
+        return rotate(it1, mid, it3);
+    }
+}
