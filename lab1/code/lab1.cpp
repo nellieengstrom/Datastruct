@@ -212,6 +212,7 @@ void TND004::stable_partition_iterative(std::vector<int>& V, std::function<bool(
     if (size(V) == 0) {
         return;
     }
+    //create 2 new vectors with reserved size of the vector V, which means that it has already allocated memory of that size. 
     std::vector<int> even;
     std::vector<int> uneven;
     even.reserve(V.size());
@@ -229,22 +230,6 @@ void TND004::stable_partition_iterative(std::vector<int>& V, std::function<bool(
     //merge the two vectors
     even.insert(even.end(), uneven.begin(), uneven.end());
     V = even; 
-
-
-    //This implementation was not linear
-    //for (int i = 0; i < size(V); i++) {
-    //    if (p(V[i])) {
-    //        if (i == 0) {
-    //            counter++;
-    //        }
-    //        else {
-    //        //How much the memory execution time is needed, linear?
-    //            V.insert(V.begin() + counter, V[i]);
-    //            counter++;
-    //            V.erase(V.begin() + i + 1);
-    //        }
-    //    }
-    //}
 }
 
 // Auxiliary function that performs the stable partition recursively
