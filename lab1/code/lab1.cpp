@@ -241,14 +241,14 @@ std::vector<int>::iterator TND004::stable_partition(std::vector<int>::iterator f
                                             std::vector<int>::iterator last,
                                             std::function<bool(int)> p) {
     // Base Case 0: The vector is empty
-    if (distance(first, last) == 0) {
+    if (std::distance(first, last) == 0) {
         std::cout << "Vector is empty" << std::endl;
         return first;
     }
 
     // Base Case 1: Both iterators are on the same element (one element)
     // first points to the beginning of the element, last points to the end of the element = resulting in a distanse of 1
-    if (distance(first,last) == 1) {
+    if (std::distance(first,last) == 1) {
         //Checks if even --> return iterator pointing to the end of the block, including the element
         if(p(*first)){
             return last;
@@ -268,13 +268,10 @@ std::vector<int>::iterator TND004::stable_partition(std::vector<int>::iterator f
         std::vector<int>::iterator it1;
         std::vector<int>::iterator it3;
 
-        //As long as there is more than one element, split into two parts
-        if (std::distance(first, last) > 1) {
             //Recursive, calls itself for each split parts
             it1 = stable_partition(first, mid, p);
             it3 = stable_partition(mid, last, p);
-        }
-        
-        return rotate(it1, mid, it3);
+            
+        return std::rotate(it1, mid, it3);
     }
 }
