@@ -21,21 +21,23 @@ Set::Set() : counter{ 0 }, head{ new Node }, tail{ new Node } {
 
 // Conversion constructor
 Set::Set(int n)
-    : Set{}  // create an empty list
-{
-    // IMPLEMENT before Lab1 HA
+    : Set{} {  // create an empty list
+    _insert(head, n);
 }
 
 // Constructor to create a Set from a sorted vector v
 Set::Set(const std::vector<int>& v)
-    : Set{}  // create an empty list
-{
-    // IMPLEMENT before Lab1 HA
+    : Set{} {  // create an empty list
+    Node* temp = head; 
+    for (int i = 0; i < size(v); i++ ){
+        _insert(temp, v[i]);
+        temp->next = temp->next;
+    }
 }
 
 // Make the set empty
 void Set::make_empty() {
-    // IMPLEMENT before Lab1 HA
+    
 }
 
 Set::~Set() {
@@ -123,13 +125,19 @@ std::ostream& operator<<(std::ostream& os, const Set& b) {
 
 // Insert a new Node storing val after the Node pointed by p
 void Set::_insert(Node* p, int val) {
-    // IMPLEMENT
+    Node* newNode = new Node(val, p->next, p);
+    p->next = p->next->prev = newNode;
+    counter++;
 }
 
 
 // Remove the Node pointed by p
 void Set::_remove(Node* p) {
-    // IMPLEMENT
+    p->prev->next = p->next;
+    p->next->prev = p->prev;
+    p->prev = p->next = nullptr;
+    delete p;
+    counter--;
 }
 
 
