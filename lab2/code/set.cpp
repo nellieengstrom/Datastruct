@@ -37,33 +37,67 @@ Set::Set(const std::vector<int>& v)
 
 // Make the set empty
 void Set::make_empty() {
-    
+    Node* temp = head;
+
+    while (!is_empty()) {
+        _remove(temp->next);
+        temp->next = temp->next->next;
+    }
 }
 
 Set::~Set() {
     // Member function make_empty() can be used to implement the destructor
-    // IMPLEMENT before Lab1 HA
+    if (!is_empty()) {
+        make_empty(); //är detta rätt?
+    }
+
+    //Måste man ha typ head->next = nullptr och tail->next = nullptr?
+    delete head;
+    delete tail;
 }
 
 // Copy constructor
 Set::Set(const Set& source)
     : Set{}  // create an empty list
 {
-    // IMPLEMENT before Lab1 HA
+    Node* p_new = head;
+    Node* p_source = source.head->next;
+
+    while (p_source != nullptr) {
+        _insert(p_new, p_source->value);
+        p_new = p_new->next;
+        p_source = p_source->next;
+    }
 }
+
 
 // Copy-and-swap assignment operator
 Set& Set::operator=(Set source) {
-    // IMPLEMENT before Lab1 HA
+    //swap: constant if non-array but linear if array
+    std::swap(counter, source.counter);
+    std::swap(head, source.head);
+    std::swap(tail, source.tail);
 
     return *this;
 }
 
 // Test set membership
 bool Set::is_member(int val) const {
-    // IMPLEMENT before Lab1 HA
+    if (is_empty()) {
+        return false;
+    }
 
-    return false;  // remove this line
+    Node* temp = head;
+    while (temp->next != nullptr && temp->next->value != val) {
+        temp = temp->next;
+    }
+
+    if (temp->value == val) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 // Test whether a set is empty
@@ -81,7 +115,7 @@ size_t Set::cardinality() const {
 // Modify *this such that it becomes the union of *this with Set S
 // Add to *this all elements in Set S (repeated elements are not allowed)
 Set& Set::operator+=(const Set& S) {
-    // IMPLEMENT
+    
 
     return *this;
 }
