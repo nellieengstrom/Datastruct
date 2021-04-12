@@ -14,8 +14,9 @@ int Set::get_count_nodes() {
 }
 
 // Default constructor
-Set::Set() : counter{0} {
-    // IMPLEMENT before Lab1 HA
+Set::Set() : counter{ 0 }, head{ new Node }, tail{ new Node } {
+    head->next = tail;
+    tail->prev = head;
 }
 
 // Conversion constructor
