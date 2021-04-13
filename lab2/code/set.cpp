@@ -31,7 +31,7 @@ Set::Set(const std::vector<int>& v)
     Node* temp = head; 
     for (int i = 0; i < size(v); i++ ){
         _insert(temp, v[i]);
-        temp->next = temp->next;
+        temp = temp->next;
     }
 }
 
@@ -86,8 +86,8 @@ bool Set::is_member(int val) const {
         return false;
     }
 
-    Node* temp = head;
-    while (temp->next != tail && temp->next->value != val) {
+    Node* temp = head->next;
+    while (temp->next != tail && temp->value < val) {
         temp = temp->next;
     }
 
@@ -114,22 +114,72 @@ size_t Set::cardinality() const {
 // Modify *this such that it becomes the union of *this with Set S
 // Add to *this all elements in Set S (repeated elements are not allowed)
 Set& Set::operator+=(const Set& S) {
-    
+    Node* lhs_p = head->next;
+    Node* rhs_p = S.head->next;
 
+    while (rhs_p != S.tail) {
+        if (lhs_p == tail) { // at the end of lhs, insert remaining nodes of rhs into lhs
+            _insert(lhs_p->prev, rhs_p->value);
+            rhs_p = rhs_p->next;
+        }
+        else if (lhs_p->value == rhs_p->value) { //value are in both sets, move pointers forward
+            lhs_p = lhs_p->next;
+            rhs_p = rhs_p->next;
+        }
+        else if (rhs_p->value < lhs_p->value) { //rhs_p points to value that is smallers, insert it and move both forward
+            _insert(lhs_p->prev, rhs_p->value);
+            rhs_p = rhs_p->next;    
+        }
+        else { //Rhs_p points to value that is higher, move lhs_p forward
+            lhs_p = lhs_p->next;
+        }
+    }
     return *this;
 }
 
 // Modify *this such that it becomes the intersection of *this with Set S
 Set& Set::operator*=(const Set& S) {
-    // IMPLEMENT
+    Node* lhs_p = head->next;
+    Node* rhs_p = S.head->next;
 
+    while (lhs_p != tail) {
+        if (rhs_p == S.tail) { //if we have reached the end of rhs, remove the last remaining nodes in lhs
+            lhs_p = lhs_p->next;
+            _remove(lhs_p->prev);
+        }
+        else if (lhs_p->value == rhs_p->value) { //value are in both sets, move pointers forward
+            lhs_p = lhs_p->next;
+            rhs_p = rhs_p->next;
+        }
+        else if (rhs_p->value < lhs_p->value) { //rhs_p points to value that is smallers, move rhs_p forward
+            rhs_p = rhs_p->next;
+        }
+        else { //Rhs_p points to value that is bigger, move lhs_p forward and remove the node behind it
+            lhs_p = lhs_p->next;
+            _remove(lhs_p->prev);
+        }
+    }
     return *this;
 }
 
 // Modify *this such that it becomes the Set difference between Set *this and Set S
 Set& Set::operator-=(const Set& S) {
-    // IMPLEMENT
+    Node* lhs_p = head->next;
+    Node* rhs_p = S.head->next;
 
+    while (lhs_p != tail && rhs_p != S.tail) {
+        if (lhs_p->value == rhs_p->value) { //value are in both sets, move both pointer forward and remove node behind lhs_p
+            lhs_p = lhs_p->next;
+            rhs_p = rhs_p->next;
+            _remove(lhs_p->prev);
+        }
+        else if (rhs_p->value < lhs_p->value) { //rhs_p points to value that is smallers, move rhs_p forward
+            rhs_p = rhs_p->next;
+        }
+        else { //Rhs_p points to value that is bigger, move lhs_p forward because its unique
+            lhs_p = lhs_p->next;
+        }
+    }
     return *this;
 }
 
@@ -150,6 +200,69 @@ std::ostream& operator<<(std::ostream& os, const Set& b) {
     return os;
 }
 
+// Overloaded subset operator<=
+bool operator<=(const Set& S1, const Set& S2) {
+    Set::Node* lhs_p = S1.head;
+    Set::Node* rhs_p = S2.head;
+
+    while (lhs_p != S1.tail) {
+        if (rhs_p == S2.tail) {
+            return false;
+        }
+        else if (lhs_p->value == rhs_p->value) {
+            lhs_p = lhs_p->next;
+            rhs_p = rhs_p->next;
+
+        }
+        else if (lhs_p->value > rhs_p->value) {
+            rhs_p = rhs_p->next;
+        }
+        else {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Overloaded proper subset operator<
+bool operator<(const Set& S1, const Set& S2) {
+    if (S1 <= S2) {
+        if (S2.cardinality() > S1.cardinality()) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+}
+
+// Overloaded Subset of each other operator==
+bool operator==(const Set& S1, const Set& S2) {
+    if (S1 <= S2) {
+        if (S2.cardinality() == S1.cardinality()) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+}
+
+// Overloaded not equal operator!=
+bool operator!=(const Set& S1, const Set& S2) {
+    if (S1 == S2) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
 /* ******************************************** *
  * Private Member Functions -- Implementation   *
  * ******************************************** */

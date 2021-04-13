@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 
+
 /** Class to represent a Set of ints
  *
  * Set is implemented as a sorted doubly linked list
@@ -164,11 +165,7 @@ private:
      * Return true, if S1 is a subset of S2, otherwise false
      *
      */
-    friend bool operator<=(const Set& S1, const Set& S2) {
-        // IMPLEMENT
-
-        return false;  // remove this line
-    }
+    friend bool operator<=(const Set& S1, const Set& S2);
 
     /** Test whether Set S1 and S2 represent the same set
      *
@@ -176,11 +173,7 @@ private:
      * Return true, if S1 stores the same elements as S2, otherwise false
      *
      */
-    friend bool operator==(const Set& S1, const Set& S2) {
-        // IMPLEMENT
-
-        return false;  // remove this line
-    }
+    friend bool operator==(const Set& S1, const Set& S2);
 
     /** Test whether Set S1 and S2 represent different sets
      *
@@ -188,22 +181,14 @@ private:
      * Return true, if S1 stores the same elements as Set S2, otherwise false
      *
      */
-    friend bool operator!=(const Set& S1, const Set& S2) {
-        // IMPLEMENT
-
-        return false;  // remove this line
-    }
+    friend bool operator!=(const Set& S1, const Set& S2);
 
     /** Test whether Set S1 is a strict subset of Set S2
      *
      * S1 < S2 iff S1 <= S2 but not S2 <= S1
      * Return true, if S1 is a strict subset of S2, otherwise false
      */
-    friend bool operator<(const Set& S1, const Set& S2) {
-        // IMPLEMENT
-
-        return false;  // remove this line
-    }
+    friend bool operator<(const Set& S1, const Set& S2);
 
     /** Overloaded operator+: Set union S1+S2
      *
