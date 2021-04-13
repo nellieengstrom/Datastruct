@@ -41,7 +41,6 @@ void Set::make_empty() {
 
     while (!is_empty()) {
         _remove(temp->next);
-        temp->next = temp->next->next;
     }
 }
 
@@ -63,7 +62,7 @@ Set::Set(const Set& source)
     Node* p_new = head;
     Node* p_source = source.head->next;
 
-    while (p_source != nullptr) {
+    while (p_source != source.tail) {
         _insert(p_new, p_source->value);
         p_new = p_new->next;
         p_source = p_source->next;
@@ -88,7 +87,7 @@ bool Set::is_member(int val) const {
     }
 
     Node* temp = head;
-    while (temp->next != nullptr && temp->next->value != val) {
+    while (temp->next != tail && temp->next->value != val) {
         temp = temp->next;
     }
 
