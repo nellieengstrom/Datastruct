@@ -7,10 +7,11 @@ struct BinarySearchTree<Comparable>::Node {
 
     Node* left;    // pointer to left sub-tree
     Node* right;   // pointer to right sub-tree
+    Node* parent;  // pointer to parent
 
     // Constructors
-    Node(const Comparable& theElement, Node* lt = nullptr, Node* rt = nullptr)
-        : element{theElement}, left{lt}, right{rt} {
+    Node(const Comparable& theElement, Node* lt = nullptr, Node* rt = nullptr, Node* par = nullptr)
+        : element{ theElement }, left{ lt }, right{ rt }, parent{par} {
         ++count_nodes;
     }
 

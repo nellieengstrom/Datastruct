@@ -142,13 +142,13 @@ private:
      * t is the node that roots the subtree.
      * Return a pointer to the node storing x.
      */
-    Node *insert(const Comparable &x, Node *t) {
+    Node *insert(const Comparable &x, Node *t, Node *parent = nullptr) {
         if (t == nullptr) {
-            t = new Node{x, nullptr, nullptr};
+            t = new Node{x, nullptr, nullptr, parent};
         } else if (x < t->element) {
-            t->left = insert(x, t->left);
+            t->left = insert(x, t->left, t);
         } else if (t->element < x) {
-            t->right = insert(x, t->right);
+            t->right = insert(x, t->right, t);
         } else {
             ;  // Duplicate; do nothing
         }
@@ -175,6 +175,7 @@ private:
         } else {
             Node *oldNode = t;
             t = (t->left != nullptr) ? t->left : t->right;
+            t->parent = oldNode->parent; 
             delete oldNode;
         }
         return t;
@@ -273,7 +274,7 @@ private:
         if (t == nullptr) {
             return nullptr;
         } else {
-            return new Node{t->element, clone(t->left), clone(t->right)};
+            return new Node{t->element, clone(t->left), clone(t->right), clone(t->parent)};
         }
     }
 };
