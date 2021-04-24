@@ -1,0 +1,42 @@
+Start batch of tests 1 ...
+==============================
+PHASE 0: insert, printTree, findMin, FindMax
+
+Tree:
+20
+  10
+     5
+    15
+      12
+        14
+  30
+    25
+    35
+      33
+
+
+PHASE 1: contains
+
+PHASE 2: copy constructor
+
+PHASE 3: makeEmpty
+
+PHASE 4: operator=
+
+PHASE 5: get_parent
+
+PHASE 6: remove
+
+PHASE 7: get_parent & clone & remove
+
+PHASE 8: get_parent after remove
+Success!!
+
+Start batch of tests 2 ...
+==============================
+
+Start batch of tests 3 ...
+==============================
+
+Exercise 3 ...
+==============================

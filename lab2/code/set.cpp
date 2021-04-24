@@ -47,10 +47,9 @@ void Set::make_empty() {
 Set::~Set() {
     // Member function make_empty() can be used to implement the destructor
     if (!is_empty()) {
-        make_empty(); //är detta rätt?
+        make_empty();
     }
-
-    //Måste man ha typ head->next = nullptr och tail->next = nullptr?
+    //Måste man ha head->next = nullptr och tail->next = nullptr?
     delete head;
     delete tail;
 }
@@ -201,6 +200,7 @@ std::ostream& operator<<(std::ostream& os, const Set& b) {
 }
 
 // Overloaded subset operator<=
+// True if S1 s a subset of S2, all nodes in S1 are in S2
 bool operator<=(const Set& S1, const Set& S2) {
     Set::Node* lhs_p = S1.head;
     Set::Node* rhs_p = S2.head;
@@ -225,6 +225,7 @@ bool operator<=(const Set& S1, const Set& S2) {
 }
 
 // Overloaded proper subset operator<
+// True if S1 s a subset of S2, but also contains atleast one additional element 
 bool operator<(const Set& S1, const Set& S2) {
     if (S1 <= S2) {
         if (S2.cardinality() > S1.cardinality()) {
@@ -240,6 +241,7 @@ bool operator<(const Set& S1, const Set& S2) {
 }
 
 // Overloaded Subset of each other operator==
+// True if S1 is S2 
 bool operator==(const Set& S1, const Set& S2) {
     if (S1 <= S2) {
         if (S2.cardinality() == S1.cardinality()) {
@@ -255,6 +257,7 @@ bool operator==(const Set& S1, const Set& S2) {
 }
 
 // Overloaded not equal operator!=
+// True if S1 is different from S2
 bool operator!=(const Set& S1, const Set& S2) {
     if (S1 == S2) {
         return false;
