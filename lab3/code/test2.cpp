@@ -4,7 +4,7 @@
 
 #include "BinarySearchTree.h"
 
-//#define TEST_PRED_SUCC
+#define TEST_PRED_SUCC
 
 /* *********************************************
  * Test 2: find_pred_succ
