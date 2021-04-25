@@ -303,6 +303,7 @@ private:
     */
     void preorder(Node* t, std::ostream& out, int depth = 0) const {
         if (t != nullptr) {
+            //If there is a left and right child then they will have the same number of spaces
             for (int i = 0; i < depth * 2; i++) {
                 out << " ";
             }
