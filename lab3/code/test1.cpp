@@ -5,7 +5,7 @@
 
 #include "BinarySearchTree.h"
 
-//#define TEST_PARENT
+#define TEST_PARENT
 
 /* *********************************************
  * Test 1: get_parent

@@ -55,6 +55,25 @@ public:
     }
 
     /**
+    * get parent of the node with value x
+    * Throw UnderflowException if not found.
+    */
+    const Comparable &get_parent(Comparable x) const {
+        Node* ptr = contains(x, root);
+        if (ptr != nullptr) { // value x is in the tree
+            if (ptr->parent == nullptr) {
+                return 0;
+            }
+            else {
+                return ptr->parent->element;
+            }
+        }
+        else { // Value x is not in the tree
+            return 0;
+        }
+    }
+
+    /**
      * Find the smallest item in the tree.
      * Throw UnderflowException if empty.
      */
@@ -100,7 +119,7 @@ public:
         if (isEmpty()) {
             out << "Empty tree";
         } else {
-            inorder(root, out);
+            preorder(root, out);
         }
     }
 
@@ -165,19 +184,29 @@ private:
         if (t == nullptr) {
             return t;  // Item not found
         }
-        if (x < t->element) {
+
+        else if (x < t->element) {
             t->left = remove(x, t->left);
-        } else if (t->element < x) {
+        } 
+        
+        else if (t->element < x) {
             t->right = remove(x, t->right);
-        } else if (t->left != nullptr && t->right != nullptr) {  // Two children
+        } 
+        
+        else if (t->left != nullptr && t->right != nullptr) {  // Two children
             t->element = findMin(t->right)->element;
             t->right = remove(t->element, t->right);
-        } else {
-            Node *oldNode = t;
+        } 
+        
+        else {
+            Node *oldNode = t; //Store the value t we want to delete to access its parent later when relinking
             t = (t->left != nullptr) ? t->left : t->right;
-            t->parent = oldNode->parent; 
-            delete oldNode;
+            if (t != nullptr) {
+                t->parent = oldNode->parent;
+            }
+            delete oldNode; //If t has no children, it can be deleted without relink the parent
         }
+
         return t;
     }
 
@@ -268,13 +297,32 @@ private:
     }
 
     /**
+    * Private member function to print a subtree rooted
+    * pre-order traversal is used
+    * Indetation is used showing the nodes depth in the tree
+    */
+    void preorder(Node* t, std::ostream& out, int depth = 0) const {
+        if (t != nullptr) {
+            for (int i = 0; i < depth * 2; i++) {
+                out << " ";
+            }
+            out <<  t->element << '\n';
+            ++depth;
+            preorder(t->left, out, depth);
+            preorder(t->right, out, depth);
+        }
+    }
+
+
+    /**
      * Private member function to clone subtree.
      */
     Node *clone(Node *t) const {
         if (t == nullptr) {
             return nullptr;
         } else {
-            return new Node{t->element, clone(t->left), clone(t->right), clone(t->parent)};
+            //Do not clone the parent because the parent has already been created in the previous step
+            return new Node{t->element, clone(t->left), clone(t->right), t->parent};
         }
     }
 };
