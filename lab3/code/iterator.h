@@ -46,31 +46,30 @@ public:
     }
     
     Iterator& operator++() { //pre-increment, returns a reference after the 
-        current = BST->find_successor(current);
+        current = find_successor(current);
         return *this;
     }
     
     Iterator operator++(int) { //post-increment, returns a copy to the old value. Changes the value but uses the original value.
         Iterator oldIt = *this; //stores the old value
-        current = BST->find_successor(current); //moves this->current
+        current = find_successor(current); //moves this->current
         return oldIt; //returns the old value
     }    
        
     Iterator& operator--() { //pre-decrement, returns a reference ...
-        current = BST->find_predecesor(current);
+        current = find_predecesor(current);
         return *this;
     }
     Iterator operator--(int) { //post-increment, returns a copy to the old value. Changes the value but uses the original value.
         Iterator oldIt = *this; //stores the old value
-        current = BST->find_predecesor(current); //moves this->current
+        current = find_predecesor(current); //moves this->current
         return oldIt; //returns the old value
     }
         
 private:
     Node* current;
-    BinarySearchTree* BST = nullptr; 
 
-    Iterator(Node* t, BinarySearchTree* tree) : current{ t }, BST{tree} {}
+    Iterator(Node* t) : current{ t } {}
 
 
     template <typename Comparable>
