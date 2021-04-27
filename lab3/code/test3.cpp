@@ -76,61 +76,61 @@ void test3() {
             }
         }
 
-        /****************************************************/
-        std::cout << "\nPHASE 1: operator++, operator*\n";
-        /****************************************************/
-        {
-            std::vector<std::string> V1{};
+    //    /****************************************************/
+    //    std::cout << "\nPHASE 1: operator++, operator*\n";
+    //    /****************************************************/
+    //    {
+    //        std::vector<std::string> V1{};
 
-            // Inorder traversal
-            /* for (BinarySearchTree<string>::Iterator it = t.begin(); it != t.end(); ++it) {
-                 V1.push_back(*it);
-             }*/
+    //        // Inorder traversal
+    //        /* for (BinarySearchTree<string>::Iterator it = t.begin(); it != t.end(); ++it) {
+    //             V1.push_back(*it);
+    //         }*/
 
-            // Inorder traversal
-            for (auto w : t) {
-                V1.push_back(w);
-            }
+    //        // Inorder traversal
+    //        for (auto w : t) {
+    //            V1.push_back(w);
+    //        }
 
-            assert(V1 == inorder);
-        }
+    //        assert(V1 == inorder);
+    //    }
 
-        /****************************************************/
-        std::cout << "\nPHASE 2: operator--, operator*\n";
-        /*****************************************************/
-        {
-            std::string largest{t.findMax()};
+    //    /****************************************************/
+    //    std::cout << "\nPHASE 2: operator--, operator*\n";
+    //    /*****************************************************/
+    //    {
+    //        std::string largest{t.findMax()};
 
-            assert(largest == "yelp");
+    //        assert(largest == "yelp");
 
-            std::vector<std::string> V1{};
+    //        std::vector<std::string> V1{};
 
-            // Backwards inorder traversal
-            for (auto it = t.find(largest); it != t.end(); --it) {
-                V1.push_back(*it);
-            }
+    //        // Backwards inorder traversal
+    //        for (auto it = t.find(largest); it != t.end(); --it) {
+    //            V1.push_back(*it);
+    //        }
 
-            std::sort(V1.begin(), V1.end());
-            assert(V1 == inorder);
-        }
+    //        std::sort(V1.begin(), V1.end());
+    //        assert(V1 == inorder);
+    //    }
 
-        /*****************************************************************/
-        std::cout << "\nPHASE 3: test iterators with STL algorithms\n";
-        /*****************************************************************/
+    //    /*****************************************************************/
+    //    std::cout << "\nPHASE 3: test iterators with STL algorithms\n";
+    //    /*****************************************************************/
 
-        std::vector<std::string> V1{};
+    //    std::vector<std::string> V1{};
 
-        // Copy the tree in inorder into a vector
-        std::copy(t.begin(), t.end(), std::back_inserter(V1));
+    //    // Copy the tree in inorder into a vector
+    //    std::copy(t.begin(), t.end(), std::back_inserter(V1));
 
-        assert(V1 == inorder);
+    //    assert(V1 == inorder);
 
-        auto f = [](const std::string& s) {
-            return std::find(s.begin(), s.end(), '\'') != s.end();
-        };
+    //    auto f = [](const std::string& s) {
+    //        return std::find(s.begin(), s.end(), '\'') != s.end();
+    //    };
 
-        // Check if there are three words in BST t with char '\''
-        assert(std::count_if(t.begin(), t.end(), f) == 3);
+    //    // Check if there are three words in BST t with char '\''
+    //    assert(std::count_if(t.begin(), t.end(), f) == 3);
     }
 
     assert(BinarySearchTree<std::string>::get_count_nodes() == 0);

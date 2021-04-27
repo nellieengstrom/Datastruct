@@ -17,8 +17,6 @@ public:
     using pointer           = Comparable*;  // or also value_type*
     using reference         = Comparable&;  // or also value_type&
     /* ****************************************************************** */
-
-    // Exercise 2: ADD CODE   
  
     //Constuctor
     Iterator() : current{nullptr} {}
@@ -32,7 +30,7 @@ public:
     }
 
     bool operator==(const Iterator& it) const {
-        if (current == it->current) { //Compares the pointers to the nodes
+        if (current == it.current) { //Compares the pointers to the nodes
             return true;
         }
         else { return false; }
@@ -48,31 +46,33 @@ public:
     }
     
     Iterator& operator++() { //pre-increment, returns a reference after the 
-        current = find_successor(current);
+        current = BST->find_successor(current);
         return *this;
     }
     
     Iterator operator++(int) { //post-increment, returns a copy to the old value. Changes the value but uses the original value.
         Iterator oldIt = *this; //stores the old value
-        current = find_successor(current); //moves this->current
+        current = BST->find_successor(current); //moves this->current
         return oldIt; //returns the old value
     }    
        
     Iterator& operator--() { //pre-decrement, returns a reference ...
-        current = find_predecesor(current);
+        current = BST->find_predecesor(current);
         return *this;
     }
     Iterator operator--(int) { //post-increment, returns a copy to the old value. Changes the value but uses the original value.
         Iterator oldIt = *this; //stores the old value
-        current = find_predecesor(current); //moves this->current
+        current = BST->find_predecesor(current); //moves this->current
         return oldIt; //returns the old value
     }
         
-   
-   template <typename Comparable>
-    friend class BinarySearchTree;
-
 private:
     Node* current;
-    Iterator(Node* t) : current{t} {}
+    BinarySearchTree* BST = nullptr; 
+
+    Iterator(Node* t, BinarySearchTree* tree) : current{ t }, BST{tree} {}
+
+
+    template <typename Comparable>
+    friend class BinarySearchTree;
 };

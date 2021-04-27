@@ -37,7 +37,7 @@ public:
 	}
 
 	Iterator& end() { //The iterator end when reaching a nullptr
-		return Iterator(nullptr);
+		return Iterator{};
 	}
 
 	Iterator find(const Comparable& x) {
@@ -45,7 +45,7 @@ public:
 		if (containsX == nullptr) {
 			return end();
 		}
-		return Iterator(containsX);
+		return Iterator(containsX, *this);
 	}
 
 	BinarySearchTree() : root{ nullptr } {
