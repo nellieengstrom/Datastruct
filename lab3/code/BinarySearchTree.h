@@ -27,8 +27,26 @@ class BinarySearchTree {
 private:
 	struct Node;  // nested class defined in node.h
 
+
 public:
 	class Iterator;  // Exercise 2: nested class to be defined in Iterator.h
+
+	Iterator& begin() { //The iterator begin at the smallest value
+		if (isEmpty()) { return end(); }
+		return Iterator(findMin(root->left));
+	}
+
+	Iterator& end() { //The iterator end when reaching a nullptr
+		return Iterator(nullptr);
+	}
+
+	Iterator find(const Comparable& x) {
+		Node* containsX = contains(x, root);
+		if (containsX == nullptr) {
+			return end();
+		}
+		return Iterator(containsX);
+	}
 
 	BinarySearchTree() : root{ nullptr } {
 	}
@@ -387,6 +405,53 @@ private:
 
 			return temp;
 		}
+	}
+
+	/* Returns a pointer to the node storing the successor of the value stored in a given node t*/
+	Node* find_successor(Node* t) const {
+		Node* successor = t;
+
+		if (t != nullptr) {
+			if (t->right != nullptr) {
+				successor = findMin(t->right);
+			}
+
+			else { //if t->right is nullptr
+				while (successor->parent != nullptr && t->element >= successor->element) {
+					successor = successor->parent;
+				}
+
+				if (successor->element < t->element) {
+					successor = nullptr;
+				}
+			}
+		}
+
+		return successor;
+	}
+
+
+	/* Returns a pointer to the node storing the predecessor of the value stored in a given node t*/
+	Node* find_predecesor(Node* t) const {
+		Node* predecesor = t;
+
+		if (t != nullptr) {
+			if (t->left != nullptr) {
+				predecesor = findMax(t->left);
+			}
+
+			else { //if t->left is nullptr
+				while (predecesor->parent != nullptr && t->element <= predecesor->element) {
+					predecesor = predecesor->parent;
+				}
+
+				if (predecesor->element > t->element) {
+					predecesor = nullptr;
+				}
+			}
+		}
+
+		return predecesor;
 	}
 };
 

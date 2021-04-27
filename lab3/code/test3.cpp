@@ -9,7 +9,7 @@
 
 #include "BinarySearchTree.h"
 
-//#define TEST_ITERATOR
+#define TEST_ITERATOR
 
 /* *********************************************
  * Test 3: Iterator
