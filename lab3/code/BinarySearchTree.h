@@ -31,13 +31,13 @@ private:
 public:
 	class Iterator;  // Exercise 2: nested class to be defined in Iterator.h
 
-	Iterator& begin() { //The iterator begin at the smallest value
+	Iterator begin() { //The iterator begin at the smallest value
 		if (isEmpty()) { return end(); }
 		return Iterator(findMin(root->left));
 	}
 
-	Iterator& end() { //The iterator end when reaching a nullptr
-		return Iterator{};
+	Iterator end() { //The iterator end when reaching a nullptr
+		return Iterator();
 	}
 
 	Iterator find(const Comparable& x) {
@@ -45,7 +45,7 @@ public:
 		if (containsX == nullptr) {
 			return end();
 		}
-		return Iterator(containsX, *this);
+		return Iterator(containsX);
 	}
 
 	BinarySearchTree() : root{ nullptr } {

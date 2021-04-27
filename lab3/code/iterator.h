@@ -68,10 +68,11 @@ public:
         
 private:
     Node* current;
-    BinarySearchTree* BST = nullptr; 
+    BinarySearchTree<Comparable>* BST; 
 
-    Iterator(Node* t, BinarySearchTree* tree) : current{ t }, BST{tree} {}
-
+    //Iterator(Node* t, BinarySearchTree* tree) : current{ t }, BST{tree} {}
+    
+    Iterator(Node* t) : current{ t }, BST{nullptr}{}
 
     template <typename Comparable>
     friend class BinarySearchTree;
