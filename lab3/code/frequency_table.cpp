@@ -17,17 +17,36 @@
 
 struct Row {
     std::string key;
-    int counter = 0; 
+    int counter = 1; 
     //We need operator< so BST knows if its going traverse left or right
     bool operator<(const Row &rhs) const {
         if (key < rhs.key) {
             return true;
         }
         else {
-            if (key == rhs.key) {
-            }
             return false;
         }
+    }
+    bool operator>=(const Row& rhs) const {
+        if (key >= rhs.key) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    bool operator==(const Row& rhs) const {
+        if (key == rhs.key && counter == rhs.counter) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    void increment() {
+        ++counter;
     }
 };
 
@@ -57,7 +76,7 @@ void exercise3() {
         }
 
         BinarySearchTree<Row> freqtable;
-        int counter = 0;
+        BinarySearchTree<Row>::Iterator it;
 
         std::string word;
         while (file >> word) {
@@ -65,15 +84,52 @@ void exercise3() {
             std::transform(word.begin(), word.end(), word.begin(), [](char& c) {return c = std::tolower(c); }); // to lower case
             std::copy_if(word.begin(), word.end(), back_inserter(result.key), allowed_char); // remove punctuations
             //Insert the corrected string in the tree
-            freqtable.insert(result);
-            ++counter;
+            it = freqtable.find(result);
+            if (it != freqtable.end()){
+                it->increment();
+            }
+            else {
+                freqtable.insert(result);
+            }
+        }
+        //freqtable.printTree();
+
+         
+
+        std::vector<Row> vector_table;
+        std::copy(freqtable.begin(), freqtable.end(), back_inserter(vector_table));
+        
+        //print vector
+        //std::copy(vector_table.begin(), vector_table.end(), std::ostream_iterator<Row>(std::cout, "\n"));
+
+        //Read the solution and insert to vector
+        std::ifstream fileTest("../code/frequency_table.txt");
+
+        std::vector<Row> vector_test;
+        std::string a;
+        int b;
+
+        // load expected frequency table sorted alphabetically
+        while (fileTest >> a >> b) {
+            Row testResult;
+            testResult.key = a;
+            testResult.counter = b;
+            vector_test.push_back(testResult);
         }
 
+        //print vector
+        //std::copy(vector_test.begin(), vector_test.end(), std::ostream_iterator<Row>(std::cout, "\n"));
 
-
+        assert(vector_table == vector_test);
     }
+
 	assert(BinarySearchTree<Row>::get_count_nodes() == 0);
 
     std::cout << "Success!!\n";
 #endif		
+}
+
+std::ostream& operator<<(std::ostream& os, const Row& R) {
+    os << R.key << "    " << R.counter;
+    return os;
 }

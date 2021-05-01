@@ -187,7 +187,7 @@ public:
 			out << "Empty tree";
 		}
 		else {
-			preorder(root, out);
+			inorder(root, out);
 		}
 	}
 
