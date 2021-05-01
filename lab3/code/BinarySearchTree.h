@@ -3,7 +3,6 @@
 #include <iostream>
 #include <iomanip>
 #include <cassert>  // used in node.h
-
 #include "dsexceptions.h"
 
 // BinarySearchTree class

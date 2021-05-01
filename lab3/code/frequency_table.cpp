@@ -19,13 +19,12 @@ struct Row {
     std::string key;
     int counter = 0; 
     //We need operator< so BST knows if its going traverse left or right
-    bool operator<(const Row& rhs) {
-        if (this->key < rhs.key) {
+    bool operator<(const Row &rhs) const {
+        if (key < rhs.key) {
             return true;
         }
         else {
-            if (this->key == rhs.key) {
-                ++counter;
+            if (key == rhs.key) {
             }
             return false;
         }
@@ -63,12 +62,13 @@ void exercise3() {
         std::string word;
         while (file >> word) {
             Row result;
-            std::transform(word.begin(), word.end(), word.begin(), [](unsigned char& c) {return c = std::tolower(c); }); // to lower case
+            std::transform(word.begin(), word.end(), word.begin(), [](char& c) {return c = std::tolower(c); }); // to lower case
             std::copy_if(word.begin(), word.end(), back_inserter(result.key), allowed_char); // remove punctuations
             //Insert the corrected string in the tree
             freqtable.insert(result);
             ++counter;
         }
+
 
 
     }
