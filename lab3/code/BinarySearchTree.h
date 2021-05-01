@@ -265,7 +265,7 @@ private:
 		}
 
 		else if (t->left != nullptr && t->right != nullptr) {  // Two children
-			t->element = findMin(t->right)->element;
+			t->element = findMin(t->right)->element; //Exercise 4: both the element we want to remove and the findMin element will be affected (references and iterators pointing to these nodes)03,
 			t->right = remove(t->element, t->right);
 		}
 
