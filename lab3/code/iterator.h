@@ -26,7 +26,7 @@ public:
     }
 
     Comparable* operator->() const { //Gives a reference to the value
-        return &(current->element); 
+        return &(current->element); //& makes it a pointer?
     }
 
     bool operator==(const Iterator& it) const {
