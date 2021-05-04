@@ -11,9 +11,9 @@ struct BinarySearchTree<Comparable>::Node {
 
     // Constructors
     Node(const Comparable& theElement, Node* lt = nullptr, Node* rt = nullptr, Node* par = nullptr)
-        : element{ theElement }, left{ lt }, right{ rt }, parent{par} {
+        : element{ theElement }, left{ lt }, right{ rt }, parent{par} { 
         ++count_nodes;
-    }
+    } //constant, as long as the copy constructor of element is constant
 
     //Copy constructors -- disallowed
     Node(const Node&) = delete;

@@ -19,7 +19,7 @@ public:
     /* ****************************************************************** */
  
     //Constuctor
-    Iterator() : current{nullptr} {}
+    Iterator() : current{nullptr} {} //constant
 
     Comparable& operator*() const {
         return current->element;
