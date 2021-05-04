@@ -40,12 +40,13 @@ public:
 	}
 
 	Iterator find(const Comparable& x) {
-		Node* containsX = contains(x, root);
+		Node* containsX = contains(x, root); //contains worst = O(n) linear
 		if (containsX == nullptr) {
 			return end();
 		}
 		return Iterator(containsX);
 	}
+	//find: n + 2*c, worst case = O(n)
 
 	BinarySearchTree() : root{ nullptr } {
 	}
@@ -53,15 +54,15 @@ public:
 	/**
 	 * Copy constructor
 	 */
-	BinarySearchTree(const BinarySearchTree& rhs) : root{ clone(rhs.root) } {
-	}
+	BinarySearchTree(const BinarySearchTree& rhs) : root{ clone(rhs.root) } { 
+	}//O(n) because clone linear
 
 	/**
 	 * Destructor for the tree
 	 */
 	~BinarySearchTree() {
 		makeEmpty();
-	}
+	} //O(n) always
 
 	/**
 	 * Copy assignment: copy and swap idiom
@@ -69,7 +70,7 @@ public:
 	BinarySearchTree& operator=(BinarySearchTree _copy) {
 		std::swap(root, _copy.root);
 		return *this;
-	}
+	}//Calls copy constructor, therefore linear
 
 	/**
 	* get parent of the node with value x
@@ -77,6 +78,7 @@ public:
 	*/
 	const Comparable& get_parent(Comparable x) const {
 		Node* ptr = contains(x, root);
+
 		if (ptr != nullptr) { // value x is in the tree
 			if (ptr->parent == nullptr) {
 				return Comparable{};
@@ -89,10 +91,13 @@ public:
 			return Comparable{};
 		}
 	}
+	// Inargument call by value = calls copy constructor for Comparable, what this constructor
+	// cost in time depends on the type of variable. 
+	// Worst case: O(n), linear if not copy constructor is linear or worse
 
 
 	std::pair<Comparable, Comparable> find_pred_succ(const Comparable& x) const {
-		Comparable pred; //the smaller
+		Comparable pred; //the smaller, calls construtor, empty = constant
 		Comparable succ; //the larger
 
 		bool xIsSmaller = true;
@@ -113,7 +118,8 @@ public:
 			}
 			else { // t->element == x
 				if (t->left != nullptr) {
-					pred = (findMax(t->left)->element);
+					pred = (findMax(t->left)->element); 
+					//could be linear in worst case, recursive instead? Better?
 				}
 
 				else if (xIsSmaller) {
@@ -122,6 +128,7 @@ public:
 
 				if (t->right != nullptr) {
 					succ = (findMin(t->right)->element);
+					//could be linear in worst case, recursive instead? Better?
 				}
 
 				else if (xIsBigger) {
@@ -137,8 +144,8 @@ public:
 			}
 
 		}
-		return std::pair<Comparable, Comparable>(pred, succ);
-	}
+		return std::pair<Comparable, Comparable>(pred, succ); //{pred, succ}, could use instead
+	} //Worst case: linear
 
 	/**
 	 * Find the smallest item in the tree.
@@ -150,7 +157,7 @@ public:
 		}
 
 		return findMin(root)->element;
-	}
+	} // O(n) linear
 
 	/**
 	 * Find the largest item in the tree.
@@ -162,14 +169,14 @@ public:
 		}
 
 		return findMax(root)->element;
-	}
+	} //worst case O(n) linear
 
 	/**
 	 * Returns true if x is found in the tree.
 	 */
 	bool contains(const Comparable& x) const {
 		return (contains(x, root) != nullptr);
-	}
+	} //worst case O(n) linear
 
 	/**
 	 * Test if the tree is logically empty.
@@ -187,7 +194,7 @@ public:
 			out << "Empty tree";
 		}
 		else {
-			inorder(root, out);
+			inorder(root, out); //linear
 		}
 	}
 
@@ -243,7 +250,8 @@ private:
 			;  // Duplicate; do nothing
 		}
 		return t;
-	}
+	} //insert goes from root to leaf, O(height+1) worst case: O(n) cause not balanced tree
+	//quadratic if copy constructor for Comparable is linear
 
 	/**
 	 * Private member function to remove from a subtree.
@@ -303,7 +311,7 @@ private:
 	 */
 	Node* findMax(Node* t) const {
 		if (t != nullptr) {
-			while (t->right != nullptr) {
+			while (t->right != nullptr) { //linear in worst case O(n)
 				t = t->right;
 			}
 		}
@@ -317,7 +325,7 @@ private:
 	 * Return a pointer to the node storing x, if x is found
 	 * Otherwise, return nullptr
 	 */
-	Node* contains(const Comparable& x, Node* t) const {
+	Node* contains(const Comparable& x, Node* t) const { 
 		if (t == nullptr) {
 			return t;
 		}
@@ -331,6 +339,11 @@ private:
 			return t;  // Match
 		}
 	}
+	// Contains: 1 comparison, 1 recursive call depending on the height. 
+	// Height could be linear because tree not balanced (list), Worst case: O(height(T)) = O(n)
+	// Average case: O(log n)
+
+
 	/****** NONRECURSIVE VERSION*************************
 	Node *contains(const Comparable &x, Node *t) const {
 		while (t != nullptr) {
@@ -349,14 +362,14 @@ private:
 	/**
 	 * Private member function to make subtree empty.
 	 */
-	Node* makeEmpty(Node* t) {
+	Node* makeEmpty(Node* t) { 
 		if (t != nullptr) {
 			makeEmpty(t->left);
 			makeEmpty(t->right);
-			delete t;
+			delete t; //delete one, constant
 		}
 		return nullptr;
-	}
+	} // Always linear because always erase all elements
 
 	/**
 	 * Private member function to print a subtree rooted at t in sorted order.
@@ -368,7 +381,7 @@ private:
 			out << t->element << '\n';
 			inorder(t->right, out);
 		}
-	}
+	} //linear, prints out all elements O(n)
 
 	/**
 	* Private member function to print a subtree rooted
@@ -385,7 +398,7 @@ private:
 			preorder(t->left, out, depth);
 			preorder(t->right, out, depth);
 		}
-	}
+	}//linear, prints out all elements O(n)
 
 
 	/**
@@ -397,14 +410,17 @@ private:
 		}
 		else {
 			//Do not clone the parent because the parent has already been created in the previous step
-			Node* temp = new Node(t->element);
+			Node* temp = new Node(t->element); 
 			temp->parent = parent;
-			temp->left = clone(t->left, temp);
+			temp->left = clone(t->left, temp); //can be as deep as the height of the tree
 			temp->right = clone(t->right, temp);
 
 			return temp;
 		}
 	}
+	//clone: 1 comp, 1 create, 1 assign, 2 recursive = depend on height
+	// Always clone all elements, worst case: O(n) linear
+
 
 	/* Returns a pointer to the node storing the successor of the value stored in a given node t*/
 	Node* find_successor(Node* t) const {
