@@ -59,5 +59,5 @@ private:
     mutable std::vector<int> path;
     mutable std::vector<int> done;
 
-    // Add  any auxiliarly member functions, if needed
+    int find_smallest_undone_distance_vertex() const;
 };
