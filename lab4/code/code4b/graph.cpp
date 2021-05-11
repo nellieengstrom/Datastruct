@@ -58,8 +58,40 @@ void Graph::removeEdge(int u, int v) {
 
 // Prim's minimum spanning tree algorithm
 void Graph::mstPrim() const {
+    std::vector<int> dist;
+    std::vector<int> path;
+    std::vector<bool> done;
 
-    // *** TODO ***
+    dist.resize(size + 1); //reserve?
+    path.resize(size + 1);
+    done.resize(size + 1);
+
+    for (int i = 1; i < table.size(); i++) {
+        dist[i] = std::numeric_limits<int>::max();
+        path[i] = 0;
+        done[i] = false;
+    }
+    dist[1] = 0;
+    done[1] = true;
+    int v = 1;
+
+    while (true) {
+        Node* u = table[v].getFirst();
+
+        while(u != nullptr){
+            if (!(done[u->vertex]) && dist[u->vertex] > u->weight ) {
+                path[u->vertex] = v;
+                dist[u->vertex] = u->weight;
+            }
+            u = table[v].getNext();
+        }
+
+        v = find_smallest_undone_distance_vertex(dist, done);
+        //display(v, path[v], dist[v]);
+
+        if (v == 0) break;
+        done[v] = true;
+    }
 }
 
 // Kruskal's minimum spanning tree algorithm
@@ -80,4 +112,17 @@ void Graph::printGraph() const {
     }
 
     std::cout << "------------------------------------------------------------------\n";
+}
+
+int Graph::find_smallest_undone_distance_vertex(std::vector<int> dist, std::vector<bool> done) const{
+    int index = 0;
+    int smallest = 0;
+    
+    for(int i = 1; i < dist.size(); i++){
+        if (((!done[i]) && smallest == 0) || ((!done[i]) && dist[i] < smallest)) {
+            index = i;
+            smallest = dist[i];
+        }
+    }
+    return index;
 }

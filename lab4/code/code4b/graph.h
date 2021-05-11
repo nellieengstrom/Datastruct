@@ -49,4 +49,6 @@ private:
     std::vector<List> table;  // table of adjacency lists
     int size;                 // number of vertices
     int n_edges;              // number of edges
+
+    int find_smallest_undone_distance_vertex(std::vector<int> dist, std::vector<bool> done) const;
 };

@@ -159,10 +159,18 @@ void Digraph::printPath(int t) const {
         return;
     }
     int distance = dist[t];
-    while (path[t] =! 0)
+    std::vector<int> V;
+    V.reserve(5);
+
+    while (!(path[t] == 0))
     {
-        std::cout << path[t] << "  ";
+        V.push_back(t);
         t = path[t];
+    }
+    V.push_back(t);
+
+    for (int i = V.size()-1; i >= 0; i--) {
+        std::cout << " " << V[i] << " ";
     }
     std::cout << "(" << distance << ")" << std::endl;
 }
