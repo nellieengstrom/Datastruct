@@ -61,6 +61,7 @@ void Graph::mstPrim() const {
     std::vector<int> dist;
     std::vector<int> path;
     std::vector<bool> done;
+    int weight = 0;
 
     dist.resize(size + 1); //reserve?
     path.resize(size + 1);
@@ -76,22 +77,23 @@ void Graph::mstPrim() const {
     int v = 1;
 
     while (true) {
-        Node* u = table[v].getFirst();
+        Node* u = table[v].getFirst(); //u is the edge from v, were v starts at 1   
 
         while(u != nullptr){
-            if (!(done[u->vertex]) && dist[u->vertex] > u->weight ) {
-                path[u->vertex] = v;
-                dist[u->vertex] = u->weight;
+         //Checks if the node is not visited and the weight of the new distance is smaller than the already existing
+            if (!(done[u->vertex]) && dist[u->vertex] >= u->weight ) {
+                path[u->vertex] = v; //Then update to that edge
+                dist[u->vertex] = u->weight; //and weight
             }
             u = table[v].getNext();
         }
-
         v = find_smallest_undone_distance_vertex(dist, done);
-        //display(v, path[v], dist[v]);
-
         if (v == 0) break;
+        std::cout << "( " << path[v] << ",  " << v << ",  " << dist[v] << ")" << std::endl;
+        weight = weight + dist[v];
         done[v] = true;
     }
+    std::cout << std::endl << "Total weight = " << weight << std::endl;
 }
 
 // Kruskal's minimum spanning tree algorithm
