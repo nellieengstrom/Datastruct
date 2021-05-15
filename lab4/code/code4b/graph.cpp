@@ -98,8 +98,38 @@ void Graph::mstPrim() const {
 
 // Kruskal's minimum spanning tree algorithm
 void Graph::mstKruskal() const {
+    Heap H = Heap<Edge>::Heap(size-1);
+    DSets D(size);
+    
+    //Adds the edges to the Min Heap
+    for (int i = 1; i < table.size(); i++) {
+        Node* u = table[i].getFirst();
+        while (u != nullptr) {
+            H.insert(Edge(i, u->vertex, u->weight));
+            u = table[i].getNext(); 
+        }
+    }
 
-    // *** TODO ***
+    int counter = 0;
+    int weight = 0;
+    Edge theEdge;
+
+    while (counter < (size - 1)) {
+        //return the root, the smallest edge in the heap and delete it
+        theEdge = H.deleteMin();
+        //Does this edge connect two different trees?
+        if (D.find(theEdge.head) != D.find(theEdge.tail)) { 
+            
+            std::cout << "( " << theEdge.tail << ",  "
+            << theEdge.head << ",  "
+            << theEdge.weight << ")" << std::endl;
+            weight = weight + theEdge.weight;
+
+            D.join(D.find(theEdge.head), D.find(theEdge.tail)); //Added to the same set
+            counter++;
+        }
+    }
+    std::cout << std::endl << "Total weight = " << weight << std::endl;
 }
 
 // print graph
