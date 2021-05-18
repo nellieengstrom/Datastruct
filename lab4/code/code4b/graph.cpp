@@ -99,7 +99,7 @@ void Graph::mstPrim() const {
 // Kruskal's minimum spanning tree algorithm
 void Graph::mstKruskal() const {
 
-    // *** TODO ***
+
 }
 
 // print graph
@@ -116,6 +116,7 @@ void Graph::printGraph() const {
     std::cout << "------------------------------------------------------------------\n";
 }
 
+//find the smallest undone vertex with the lowest weight
 int Graph::find_smallest_undone_distance_vertex(std::vector<int> dist, std::vector<bool> done) const{
     int index = 0;
     int smallest = 0;
