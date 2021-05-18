@@ -59,36 +59,39 @@ void Digraph::uwsssp(int s) const {
         std::cout << "\nERROR: expected source s in range 1.." << size << " !\n";
         return;
     }
-    Queue<int> Q;
+    Queue<int> Q; 
 
     for (int i = 1; i < table.size(); i++) {
-        dist[i] = -1;
+        dist[i] = -1; //intial value for all vertexes
         path[i] = 0;
     }
 
-    dist[s] = 0;
-    Q.enqueue(s);
-
+    dist[s] = 0; //choose starting point
+    Q.enqueue(s); //puts the starting point at the back of the Queue
+ 
+    //while there is still vertexes not visited
     while (!Q.isEmpty()) {
-
-        int v = Q.getFront();
-        Q.dequeue();
+        int v = Q.getFront(); //Takes the front element and store in v
+        Q.dequeue(); //Removes that element from the Queue
 
         Node* u = table[v].getFirst(); //get pointer to first element of list (adjancent)
+
+        //Goes through the adjacent vertexes of the first element
         while (u != nullptr) {
             if (dist[u->vertex] == -1) { // Not already marked
-                dist[u->vertex] = dist[v] + 1; //distance is former nodes distance + 1
+                dist[u->vertex] = dist[v] + 1; //distance is former nodes distance + 1 (unweighted)
                 path[u->vertex] = v; //the path is the former node
-                Q.enqueue(u->vertex);
+                Q.enqueue(u->vertex); //puts the adjancent vertex in the back of the Queue
             }
-            u = table[v].getNext();
+            u = table[v].getNext(); //next adjancent vertex
         }
 
     }
 }
 
 // positive weighted single source shortest paths
-// Dijktra’s algorithm
+// Dijktra’s algorithm, here done[] vector is used to mark. Do not use a Queue
+// So we have no cycles
 void Digraph::pwsssp(int s) const {
     if (s < 1 || s > size) {
         std::cout << "\nERROR: expected source s in range 1.." << size << " !\n";
@@ -96,30 +99,33 @@ void Digraph::pwsssp(int s) const {
     }
 
     for (int i = 1; i < table.size(); i++) {
-        dist[i] = std::numeric_limits<int>::max();
+        dist[i] = std::numeric_limits<int>::max(); //inital values
         path[i] = 0;
         done[i] = false;
     }
 
-    dist[s] = 0;
-    done[s] = true;
+    dist[s] = 0; //set the starting point
+    done[s] = true; //its visited
 
     int v = s;
 
     while (true) {
         Node* u = table[v].getFirst(); //get pointer to first element of list (adjancent)
         while (u != nullptr) {
+            //Whats the cost of reaching node u coming from v, compared to the cost we already have
             if (!(done[u->vertex]) && (dist[u->vertex] > dist[v] + u->weight)) {
-                dist[u->vertex] = dist[v] + u->weight;
-                path[u->vertex] = v;
+                dist[u->vertex] = dist[v] + u->weight; //if smaller, then replace it
+                path[u->vertex] = v; //best path is now reaching u coming from v
             } 
             u = table[v].getNext();
         }
+
+        //The ones not already visited, find the smallest distance.
         v = find_smallest_undone_distance_vertex();
-        if (v == 0) {
+        if (v == 0) { //if there is no unvisited, then exit
             break;
         }
-        done[v] = true;
+        done[v] = true; //the v is set to visited
     }
 }
 
@@ -160,16 +166,16 @@ void Digraph::printPath(int t) const {
     }
     int distance = dist[t];
     std::vector<int> V;
-    V.reserve(5);
+    V.reserve(5); //reserve memory in vector
 
-    while (!(path[t] == 0))
+    while (!(path[t] == 0)) //while path is not 0
     {
-        V.push_back(t);
-        t = path[t];
+        V.push_back(t); //saves t into the vector
+        t = path[t]; //moves t to the next vertex, next index
     }
-    V.push_back(t);
+    V.push_back(t); //extra push_back because the start vertex has path 0
 
-    for (int i = V.size()-1; i >= 0; i--) {
+    for (int i = V.size()-1; i >= 0; i--) { //then just cout the vector, backwards
         std::cout << " " << V[i] << " ";
     }
     std::cout << "(" << distance << ")" << std::endl;
@@ -181,8 +187,10 @@ int Digraph::find_smallest_undone_distance_vertex() const
     int index = 0;
     int i = 1;
     while (i < dist.size()) {
+        //Checks that the vertex is unvisited and smallest = 0, its the first time
+        //or its unvisited and the distance is smaller than the latest smallest
         if (((!done[i]) && smallest == 0) || ((!done[i]) && dist[i] < smallest)) {
-            index = i;
+            index = i; //want to return its index
             smallest = dist[i];
         }
         ++i;

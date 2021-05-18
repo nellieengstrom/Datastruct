@@ -45,10 +45,20 @@ void DSets::join(int r, int s) {
     assert(array[s] < 0);
 
     // simple union
-    array[r] = s;
+    //array[r] = s;
 
     // *** TODO ***
     // Do Union by Size
+    if(array[r] < array[s]){ //r is deeper
+        array[s] = r; //Make r new root
+    }
+    else {
+
+        if (array[s] == array[r]) {
+            --array[s]; //Update height if same
+        }
+        array[r] = s; //Make s new root
+    }
 }
 
 // return name of current set for x
@@ -57,14 +67,23 @@ int DSets::find(int x) {
     assert(x >= 1 && x <= size);
 
     // simple find
-    if (array[x] < 0) {
+    /*if (array[x] < 0) {
         return x;
     } else {
         return find(array[x]);
-    }
+    }*/
 
     // *** TODO ***
     // find with path compression
+    if (array[x] < 0) {
+        return x;
+    }
+
+    else {
+        return array[x] = find(array[x]);
+    }
+
+
 }
 
 // just in case ...
