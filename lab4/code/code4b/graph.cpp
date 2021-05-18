@@ -58,26 +58,26 @@ void Graph::removeEdge(int u, int v) {
 
 // Prim's minimum spanning tree algorithm
 void Graph::mstPrim() const {
-    std::vector<int> dist;
+    std::vector<int> dist; //creates new vectors
     std::vector<int> path;
     std::vector<bool> done;
     int weight = 0;
 
-    dist.resize(size + 1); //reserve?
+    dist.resize(size + 1); //changes the size so it will fit, and do not need to reallocate
     path.resize(size + 1);
     done.resize(size + 1);
 
     for (int i = 1; i < table.size(); i++) {
-        dist[i] = std::numeric_limits<int>::max();
+        dist[i] = std::numeric_limits<int>::max(); //set initial values
         path[i] = 0;
         done[i] = false;
     }
-    dist[1] = 0;
+    dist[1] = 0; //Set the starting point
     done[1] = true;
     int v = 1;
 
     while (true) {
-        Node* u = table[v].getFirst(); //u is the edge from v, were v starts at 1   
+        Node* u = table[v].getFirst(); //get pointer to first element of list (adjancent)
 
         while(u != nullptr){
          //Checks if the node is not visited and the weight of the new distance is smaller than the already existing
@@ -87,21 +87,27 @@ void Graph::mstPrim() const {
             }
             u = table[v].getNext();
         }
+
+        //The ones not already visited, find the smallest distance.
         v = find_smallest_undone_distance_vertex(dist, done);
         if (v == 0) break;
+
+        //Then print the edges of the minimum spanning tree
         std::cout << "( " << path[v] << ",  " << v << ",  " << dist[v] << ")" << std::endl;
         weight = weight + dist[v];
         done[v] = true;
     }
+    //and the total weight
     std::cout << std::endl << "Total weight = " << weight << std::endl;
 }
 
 // Kruskal's minimum spanning tree algorithm
 void Graph::mstKruskal() const {
-    Heap H = Heap<Edge>::Heap(size-1);
-    DSets D(size);
+    Heap H = Heap<Edge>::Heap(size-1); //minHeap, root is always edge that is not
+    //in the tree and with the lowest weight
+    DSets D(size); //n disjoint trees with one node in each
     
-    //Adds the edges to the Min Heap
+    //Adds the edges to the minHeap
     for (int i = 1; i < table.size(); i++) {
         Node* u = table[i].getFirst();
         while (u != nullptr) {
@@ -115,11 +121,13 @@ void Graph::mstKruskal() const {
     Edge theEdge;
 
     while (counter < (size - 1)) {
-        //return the root, the smallest edge in the heap and delete it
+        //return the root = the edge with the smallest weight, and delete it
         theEdge = H.deleteMin();
-        //Does this edge connect two different trees?
+
+        //Does this edge connect two different trees? Checks the head and tail pointers
         if (D.find(theEdge.head) != D.find(theEdge.tail)) { 
             
+            //Prints the vertexes the edge connects and the weight of the edge
             std::cout << "( " << theEdge.tail << ",  "
             << theEdge.head << ",  "
             << theEdge.weight << ")" << std::endl;
@@ -146,13 +154,16 @@ void Graph::printGraph() const {
     std::cout << "------------------------------------------------------------------\n";
 }
 
+//Same as before but send in the dist and done instead
 int Graph::find_smallest_undone_distance_vertex(std::vector<int> dist, std::vector<bool> done) const{
     int index = 0;
     int smallest = 0;
     
     for(int i = 1; i < dist.size(); i++){
+        //Checks that the vertex is unvisited and smallest = 0, its the first time
+        //or its unvisited and the distance is smaller than the latest smallest
         if (((!done[i]) && smallest == 0) || ((!done[i]) && dist[i] < smallest)) {
-            index = i;
+            index = i; //want to return its index
             smallest = dist[i];
         }
     }
